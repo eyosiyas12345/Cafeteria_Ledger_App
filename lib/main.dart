@@ -22,7 +22,7 @@ void main() {
               Text('APP',
                   style: TextStyle(
                     color: Color(0xffffa701),
-                    fontSize: 24,
+                    fontSize: 32,
                     fontWeight: FontWeight.bold,
                   )),
               SizedBox(height: 100),
