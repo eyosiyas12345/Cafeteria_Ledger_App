@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(
-    const MaterialApp(
+    MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Color(0xff4b0101),
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: const <Widget>[
-              SizedBox(height: 100),
+            children: [
+              Image.asset('assets/images/cafe-template.jpg', width: 300),
               Text(
                 'CAFETERIA LEDGER',
                 style: TextStyle(
