@@ -5,7 +5,7 @@ void main() {
     MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Color(0xff4b0101),
+        backgroundColor: Colors.black,
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -28,7 +28,7 @@ void main() {
               SizedBox(height: 100),
               Text('coming soon...',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Color(0xffaba2a2),
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   )),
