@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
-final Color _primary_color = Colors.orange;
-final Color _seconday_color = Color(0xff903829);
-final Color _white_color = Colors.white;
+import 'package:helloworld/constants/app_colors.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -14,11 +11,11 @@ class HomePage extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: _primary_color,
+          backgroundColor: primaryColor,
           title: Text(
             "Cafeteria Ledger",
             style: TextStyle(
-                color: _seconday_color,
+                color: secondayColor,
                 fontSize: 18,
                 fontWeight: FontWeight.bold),
           ),
@@ -36,7 +33,7 @@ class HomePage extends StatelessWidget {
         body: Column(
           children: [
             Image.asset(
-              'assets/images/foreground.jpg',
+              'assets/images/uniques/foreground.jpg',
               fit: BoxFit.cover,
               width: double.infinity,
             ),
@@ -50,22 +47,22 @@ class HomePage extends StatelessWidget {
                   onPressed: () {},
                   child: const Text("Hot Drinks"),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _primary_color,
-                    foregroundColor: _white_color,
+                    backgroundColor: primaryColor,
+                    foregroundColor: whiteColor,
                   ),
                 ),
                 OutlinedButton(
                   onPressed: () {},
                   child: const Text("Break Fast"),
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: _primary_color,
+                    foregroundColor: primaryColor,
                   ),
                 ),
                 OutlinedButton(
                     onPressed: () {},
                     child: const Text("Lunch"),
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: _primary_color,
+                      foregroundColor: primaryColor,
                     )),
               ],
             ),
@@ -74,10 +71,26 @@ class HomePage extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const ItemCard(),
-                const ItemCard(),
-                const ItemCard(),
+              children: const [
+                ItemCard(),
+                ItemCard(),
+                ItemCard(),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: const [
+                ItemCard(),
+                ItemCard(),
+                ItemCard(),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: const [
+                ItemCard(),
+                ItemCard(),
+                ItemCard(),
               ],
             ),
           ],
@@ -96,16 +109,19 @@ class ItemCard extends StatelessWidget {
       width: 110,
       height: 150,
       child: Card(
-        color: _primary_color,
-        shadowColor: _primary_color,
+        color: primaryColor,
+        shadowColor: primaryColor,
         elevation: 5,
         clipBehavior: Clip.hardEdge,
         child: Padding(
           padding: const EdgeInsets.only(bottom: 50),
           child: Column(
             children: [
-              Image.asset('assets/images/caputuno.jpg'),
-              Text("Caputino", style: TextStyle(color: _primary_color)),
+              Image.asset('assets/images/items/caputuno.jpg'),
+              const Text(
+                "Caputino",
+                style: TextStyle(color: primaryColor),
+              ),
             ],
           ),
         ),
