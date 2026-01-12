@@ -6,15 +6,16 @@ class MenuItem {
   final double rate;
   final int price;
   final String imagePath;
+  final ItemCategory category; // Add this line
   bool isFavorited;
 
-  // Constructor
   MenuItem({
     required this.id,
     required this.name,
     required this.rate,
     required this.price,
     required this.imagePath,
+    required this.category, // Add this line
     required this.isFavorited,
   });
 }

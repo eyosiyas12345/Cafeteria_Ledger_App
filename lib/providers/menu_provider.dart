@@ -3,22 +3,51 @@ import 'package:helloworld/data/menu_data.dart';
 import 'package:helloworld/models/menu_item.dart';
 
 class MenuProvider extends ChangeNotifier {
-  // Convert your raw Map data into a List of MenuItem objects
+  // Current state variables
+  ItemCategory _selectedCategory = ItemCategory.drinks;
+  String _searchQuery = "";
+
+  ItemCategory get selectedCategory => _selectedCategory;
+
+  // Method called by the TextField in MenuPage
+  void updateSearch(String query) {
+    _searchQuery = query.toLowerCase();
+    notifyListeners(); // Refresh the list as the user types
+  }
+
+  // Method called by the Category buttons/chips
+  void setCategory(ItemCategory category) {
+    _selectedCategory = category;
+    notifyListeners();
+  }
+
+  // The main getter that MenuPage and HomePage use to display items
+  List<MenuItem> get filteredItems {
+    return _allItems.where((item) {
+      final matchesCategory = item.category == _selectedCategory;
+      final matchesSearch = item.name.toLowerCase().contains(_searchQuery);
+
+      // Only show if BOTH conditions are true
+      return matchesCategory && matchesSearch;
+    }).toList();
+  }
+
+  // Initial mapping of your raw data into the MenuItem model
   final List<MenuItem> _allItems = drinkItems.map((item) {
     return MenuItem(
       id: item['id'],
       name: item['name'],
       rate: item['rate'],
       price: item['price'],
-      imagePath:
-          item['image'], // Ensure you added 'image' to your MenuItem model
-      isFavorited: false,
+      imagePath: item['image'],
+      category: item['catagory'],
+      isFavorited: item['isFavorited'] ?? false,
     );
   }).toList();
 
   List<MenuItem> get allItems => _allItems;
 
-  // This returns only the items where isFavorited is true
+  // Returns only items marked as favorite for the Favorites page
   List<MenuItem> get favoriteItems =>
       _allItems.where((item) => item.isFavorited).toList();
 
@@ -26,7 +55,7 @@ class MenuProvider extends ChangeNotifier {
     final index = _allItems.indexWhere((item) => item.id == id);
     if (index != -1) {
       _allItems[index].isFavorited = !_allItems[index].isFavorited;
-      notifyListeners(); // This is the magic! It refreshes the UI everywhere.
+      notifyListeners();
     }
   }
 }

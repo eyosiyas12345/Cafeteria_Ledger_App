@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:helloworld/constants/app_colors.dart';
 import 'package:helloworld/customWidgets/reusable_card.dart';
+import 'package:helloworld/providers/menu_provider.dart';
+import 'package:helloworld/data/menu_data.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
+  Widget build(BuildContext context) {
+    final menuProvider = context.watch<MenuProvider>();
+    final itemsToShow = menuProvider.filteredItems;
 
-class _HomePageState extends State<HomePage> {
-  final double cardRadius = 16.0;
-
-  @override
-  Widget build(context) {
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -22,112 +21,84 @@ class _HomePageState extends State<HomePage> {
             fit: BoxFit.cover,
             width: double.infinity,
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
+
+          // 2. Category Buttons
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              ElevatedButton(
-                onPressed: () {},
-                child: const Text("Hot Drinks"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: primaryColor,
-                  foregroundColor: whiteColor,
-                ),
-              ),
-              OutlinedButton(
-                onPressed: () {},
-                child: const Text("Break Fast"),
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: primaryColor,
-                ),
-              ),
-              OutlinedButton(
-                  onPressed: () {},
-                  child: const Text("Lunch"),
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: primaryColor,
-                  )),
+              _buildFilterBtn(context, "Hot Drinks", ItemCategory.drinks),
+              _buildFilterBtn(context, "Breakfast", ItemCategory.breakfast),
+              _buildFilterBtn(context, "Lunch", ItemCategory.lunch),
             ],
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [
-              ItemCard(
-                itemImagePath: 'assets/images/items/coffee.jpg',
-              ),
-              ItemCard(
-                itemImagePath: 'assets/images/items/caputuno.jpg',
-              ),
-              ItemCard(
-                itemImagePath: 'assets/images/items/milk.jpg',
-              ),
-            ],
-          ),
+
           const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [
-              ItemCard(
-                itemImagePath: 'assets/images/items/full.jpg',
-              ),
-              ItemCard(
-                itemImagePath: 'assets/images/items/ferfer.jpg',
-              ),
-              ItemCard(
-                itemImagePath: 'assets/images/items/quanta firfir.jpg',
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [
-              ItemCard(
-                itemImagePath: 'assets/images/items/tibs.webp',
-              ),
-              ItemCard(
-                itemImagePath: 'assets/images/items/shiro.webp',
-              ),
-              ItemCard(
-                itemImagePath: 'assets/images/items/enkulal firfer.jpg',
-              ),
-            ],
+
+          // 3. Dynamic Grid - Adjusted for 3 columns
+          Padding(
+            // Reduced horizontal padding to give more room for 3 cards
+            padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
+            child: Wrap(
+              spacing: 6, // Reduced from 10 to 6 to save horizontal space
+              runSpacing: 12,
+              alignment: WrapAlignment
+                  .start, // Changed to start for consistent 3-column look
+              children: itemsToShow.map((item) {
+                return ItemCard(item: item);
+              }).toList(),
+            ),
           ),
         ],
       ),
     );
-    // bottomNavigationBar: BottomNavigationBar(
-    //   // onTap: changePage(),
-    //   items: [
-    //     BottomNavigationBarItem(
-    //       icon: Icon(Icons.home),
-    //       label: "Home",
-    //       backgroundColor: primaryColor,
-    //     ),
-    //     BottomNavigationBarItem(
-    //       icon: Icon(Icons.book),
-    //       label: "Menu",
-    //     ),
-    //     BottomNavigationBarItem(
-    //       icon: Icon(Icons.man),
-    //       label: "profile",
-    //     ),
-    //     BottomNavigationBarItem(
-    //       icon: Icon(
-    //         Icons.book_online_outlined,
-    //       ),
-    //       label: "ledger",
-    //       backgroundColor: secondayColor,
-    //     ),
-    //   ],
-    // ),
+  }
+
+  Widget _buildFilterBtn(BuildContext context, String title, ItemCategory cat) {
+    final provider = context.read<MenuProvider>();
+    bool isSelected = provider.selectedCategory == cat;
+
+    return isSelected
+        ? ElevatedButton(
+            onPressed: () => provider.setCategory(cat),
+            style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
+            child: Text(title,
+                style: const TextStyle(color: Colors.white, fontSize: 12)),
+          )
+        : OutlinedButton(
+            onPressed: () => provider.setCategory(cat),
+            child: Text(title,
+                style: const TextStyle(color: primaryColor, fontSize: 12)),
+          );
   }
 }
+// bottomNavigationBar: BottomNavigationBar(
+//   // onTap: changePage(),
+//   items: [
+//     BottomNavigationBarItem(
+//       icon: Icon(Icons.home),
+//       label: "Home",
+//       backgroundColor: primaryColor,
+//     ),
+//     BottomNavigationBarItem(
+//       icon: Icon(Icons.book),
+//       label: "Menu",
+//     ),
+//     BottomNavigationBarItem(
+//       icon: Icon(Icons.man),
+//       label: "profile",
+//     ),
+//     BottomNavigationBarItem(
+//       icon: Icon(
+//         Icons.book_online_outlined,
+//       ),
+//       label: "ledger",
+//       backgroundColor: secondayColor,
+//     ),
+//   ],
+// ),
+//   }
+// }
 
 // class ItemCard extends StatelessWidget {
 //   const ItemCard({super.key});
