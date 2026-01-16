@@ -58,4 +58,26 @@ class MenuProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  // Inside your MenuProvider class
+  List<Map<String, dynamic>> _ledgerOrders = [];
+
+  List<Map<String, dynamic>> get ledgerOrders => _ledgerOrders;
+
+  void addToLedger(MenuItem item, int quantity) {
+    _ledgerOrders.add({
+      'date':
+          "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year % 100}",
+      'name': item.name,
+      'qty': quantity.toString(),
+      'price': item.price.toString(),
+      'total': (item.price * quantity).toString(),
+    });
+    notifyListeners(); // This tells the Profile Page to rebuild the table
+  }
+
+  double get totalDue {
+    return _ledgerOrders.fold(
+        0, (sum, item) => sum + double.parse(item['total']));
+  }
 }

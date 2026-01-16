@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:helloworld/main_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:helloworld/pages/auth/login.dart';
@@ -15,6 +16,30 @@ class _SignUpPageState extends State<SignUpPage> {
   final _formGlobalKey = GlobalKey<FormState>();
   File? _image;
 
+//function for google authentication
+  Future<void> handleGoogleSignIn() async {
+    GoogleAuthProvider googleProvider = GoogleAuthProvider();
+    try {
+      // This triggers the Google Popup
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithPopup(googleProvider);
+
+      // If successful, navigate to the MainScreen
+      if (userCredential.user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MainScreen()),
+        );
+      }
+    } catch (e) {
+      // Show an error if something goes wrong (like the user closing the popup)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Google Sign-In Failed: $e")),
+      );
+    }
+  }
+
+//function for image picking from gallery
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -161,13 +186,12 @@ class _SignUpPageState extends State<SignUpPage> {
                         minimumSize: const Size(300, 45)),
                     child: const Text("Login"),
                   ),
+                  const SizedBox(height: 20),
 
                   //--- GOOGLE BUTTON ---
                   OutlinedButton(
-                    onPressed: () {
-                      // TODO: Implement Google Sign-In logic
-                      print("Google Sign Up Tapped");
-                    },
+                    // Function to: Implement Google Sign-In logic
+                    onPressed: handleGoogleSignIn,
                     style: OutlinedButton.styleFrom(
                       backgroundColor: Colors.white,
                       minimumSize:
@@ -175,7 +199,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       side: const BorderSide(
                           color: Color(0xFFE0E0E0)), // Light grey border
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(25),
                       ),
                     ),
                     child: Row(

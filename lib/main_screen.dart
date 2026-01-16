@@ -34,7 +34,7 @@ class _MainScreenState extends State<MainScreen> {
           CircleAvatar(
             radius: 35,
             backgroundImage:
-                AssetImage('assets/profile_pic.png'), // Add your image path
+                AssetImage('assets/users/profile.jpg'), // Add your image path
           ),
           SizedBox(width: 15),
           Text(
@@ -86,8 +86,6 @@ class _MainScreenState extends State<MainScreen> {
               _buildMenuItem(Icons.favorite_border, "Favorites"),
               _buildMenuItem(
                   Icons.account_balance_wallet_outlined, "Payment methods"),
-              _buildMenuItem(Icons.settings_outlined, "Settings"),
-              _buildMenuItem(Icons.info_outline, "About this app"),
               const Spacer(), // Pushes the logout to the bottom
               _buildMenuItem(Icons.logout, "Logout"),
             ],
