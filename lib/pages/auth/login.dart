@@ -68,34 +68,25 @@ class _LoginPageState extends State<LoginPage> {
   // }
   Future<void> _loginWithGoogle() async {
     try {
-      // Logic: Initialize the Google Sign In object
-      final GoogleSignIn googleSignIn = GoogleSignIn();
+      // Logic: Use the same Popup provider as the SignUp page for consistency
+      GoogleAuthProvider googleProvider = GoogleAuthProvider();
 
-      // 1. Start the flow
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      // 1. Trigger the popup
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithPopup(googleProvider);
 
-      if (googleUser == null) return; // User closed the popup
-
-      // 2. Get the auth details
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      // 3. Create the credential
-      final OAuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      // 4. Sign in to Firebase
-      await FirebaseAuth.instance.signInWithCredential(credential);
-
-      if (mounted) {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const MainScreen()));
+      // 2. Navigate if successful
+      if (userCredential.user != null && mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MainScreen()),
+        );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Google Error: $e")));
+      // Helpful for debugging the 'messy text' or cancelled popups
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Google Login Error: $e")),
+      );
     }
   }
 
@@ -110,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text("Welcome Back",
+                const Text("WELCOME",
                     style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,

@@ -8,12 +8,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Prepares Flutter for async code
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // Logic: Tell the app to use your Chapa Test Key
-  Chapa.configure(privateKey: 'CHAPUBK_TEST-pHha9wFE2e7XVAsPbqzjTqh0o5uVgK0o');
 
   runApp(
     ChangeNotifierProvider(
@@ -24,10 +22,9 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key}); // Make MyApp constructor const
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    // Add a type to the context parameter
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const SplashScreen(),

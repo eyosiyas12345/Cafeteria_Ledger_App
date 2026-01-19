@@ -4,9 +4,8 @@ import 'package:helloworld/pages/app_shell/menu_page.dart';
 import 'package:helloworld/pages/app_shell/profile_page.dart';
 import 'package:helloworld/pages/app_shell/feed_back.dart';
 import 'package:helloworld/constants/app_colors.dart';
-import 'package:helloworld/pages/order_flow/favorites.dart'
-    as favorites; // Use alias to avoid conflict
-import 'package:helloworld/pages/order_flow/payment.dart';
+import 'package:helloworld/pages/order_flow/favorites.dart' as favorites;
+import 'package:helloworld/pages/order_flow/pay.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -117,7 +116,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.book_online, color: secondaryColor),
-            label: "Ledger",
+            label: "Comment",
           ),
         ],
       ),

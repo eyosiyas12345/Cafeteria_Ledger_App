@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "295638246656",
+    "project_id": "cafeteria-ledger-app-dfbf6",
+    "storage_bucket": "cafeteria-ledger-app-dfbf6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295638246656:android:750e95d47c0fb3bd6abfe5",
+        "android_client_info": {
+          "package_name": "com.eyosiyas.cafeteria_ledger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "295638246656-mvdaud0jbvlf4k0r8naiheo3i1q7bepu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2Im3j8_nNyllCLfaM9EO0WIUZ42WdO0Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "295638246656-mvdaud0jbvlf4k0r8naiheo3i1q7bepu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

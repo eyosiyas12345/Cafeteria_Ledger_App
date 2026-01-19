@@ -1,38 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // REQUIRED FOR FirebaseAuth
+import 'package:cloud_firestore/cloud_firestore.dart'; // REQUIRED FOR FirebaseFirestore
 import 'package:helloworld/data/menu_data.dart';
 import 'package:helloworld/models/menu_item.dart';
 
 class MenuProvider extends ChangeNotifier {
-  // Current state variables
   ItemCategory _selectedCategory = ItemCategory.drinks;
   String _searchQuery = "";
 
   ItemCategory get selectedCategory => _selectedCategory;
 
-  // Method called by the TextField in MenuPage
-  void updateSearch(String query) {
-    _searchQuery = query.toLowerCase();
-    notifyListeners(); // Refresh the list as the user types
+  // We no longer keep a local _ledgerOrders list here because
+  // the ProfilePage now listens to Firestore directly.
+
+  void clearData() {
+    _searchQuery = "";
+    // Reset favorites in the local list
+    for (var item in _allItems) {
+      item.isFavorited = false;
+    }
+    notifyListeners();
   }
 
-  // Method called by the Category buttons/chips
+  void updateSearch(String query) {
+    _searchQuery = query.toLowerCase();
+    notifyListeners();
+  }
+
   void setCategory(ItemCategory category) {
     _selectedCategory = category;
     notifyListeners();
   }
 
-  // The main getter that MenuPage and HomePage use to display items
   List<MenuItem> get filteredItems {
     return _allItems.where((item) {
       final matchesCategory = item.category == _selectedCategory;
       final matchesSearch = item.name.toLowerCase().contains(_searchQuery);
-
-      // Only show if BOTH conditions are true
       return matchesCategory && matchesSearch;
     }).toList();
   }
 
-  // Initial mapping of your raw data into the MenuItem model
   final List<MenuItem> _allItems = drinkItems.map((item) {
     return MenuItem(
       id: item['id'],
@@ -47,7 +54,6 @@ class MenuProvider extends ChangeNotifier {
 
   List<MenuItem> get allItems => _allItems;
 
-  // Returns only items marked as favorite for the Favorites page
   List<MenuItem> get favoriteItems =>
       _allItems.where((item) => item.isFavorited).toList();
 
@@ -59,25 +65,26 @@ class MenuProvider extends ChangeNotifier {
     }
   }
 
-  // Inside your MenuProvider class
-  List<Map<String, dynamic>> _ledgerOrders = [];
+  // UPDATED: This now correctly sends data to the cloud
+  Future<void> addToLedger(MenuItem item, int quantity) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
 
-  List<Map<String, dynamic>> get ledgerOrders => _ledgerOrders;
-
-  void addToLedger(MenuItem item, int quantity) {
-    _ledgerOrders.add({
-      'date':
-          "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year % 100}",
-      'name': item.name,
-      'qty': quantity.toString(),
-      'price': item.price.toString(),
-      'total': (item.price * quantity).toString(),
-    });
-    notifyListeners(); // This tells the Profile Page to rebuild the table
-  }
-
-  double get totalDue {
-    return _ledgerOrders.fold(
-        0, (sum, item) => sum + double.parse(item['total']));
+    try {
+      await FirebaseFirestore.instance.collection('ledger').add({
+        'uid': user.uid,
+        'name': item.name,
+        'qty': quantity,
+        'price': item.price,
+        'total': (item.price * quantity),
+        'date':
+            "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year % 100}",
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+      // No need to notifyListeners() here because the Stream in ProfilePage
+      // will automatically detect this new database entry and update the UI.
+    } catch (e) {
+      debugPrint("Error adding to ledger: $e");
+    }
   }
 }
