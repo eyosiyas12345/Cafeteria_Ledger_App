@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:helloworld/pages/app_shell/home_page.dart'; // Import your separate files
+import 'package:helloworld/pages/app_shell/home_page.dart';
 import 'package:helloworld/pages/app_shell/menu_page.dart';
 import 'package:helloworld/pages/app_shell/profile_page.dart';
 import 'package:helloworld/pages/app_shell/feed_back.dart';
@@ -17,23 +17,21 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
-  // List of the actual page widgets
   final List<Widget> _pages = const [
-    HomePage(), // Move your current home code here
-    MenuPage(), // Move your menu code here
+    HomePage(),
+    MenuPage(),
     ProfilePage(),
     FeedbackScreen(),
   ];
 
   Widget _buildHeader() {
     return const DrawerHeader(
-      decoration: BoxDecoration(color: Colors.orange),
+      decoration: BoxDecoration(color: primaryColor),
       child: Row(
         children: [
           CircleAvatar(
             radius: 35,
-            backgroundImage:
-                AssetImage('assets/users/profile.jpg'), // Add your image path
+            backgroundImage: AssetImage('assets/users/profile.jpg'),
           ),
           SizedBox(width: 15),
           Text(
@@ -77,7 +75,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
       drawer: Drawer(
         child: Container(
-          color: Colors.orange, // Matching your background color
+          color: primaryColor,
           child: Column(
             children: [
               _buildHeader(),
@@ -91,7 +89,6 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ),
       ),
-      // Only the body changes based on the index
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,

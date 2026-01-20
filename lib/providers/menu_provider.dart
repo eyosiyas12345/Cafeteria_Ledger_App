@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // REQUIRED FOR FirebaseAuth
-import 'package:cloud_firestore/cloud_firestore.dart'; // REQUIRED FOR FirebaseFirestore
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:helloworld/data/menu_data.dart';
 import 'package:helloworld/models/menu_item.dart';
 
@@ -10,12 +10,8 @@ class MenuProvider extends ChangeNotifier {
 
   ItemCategory get selectedCategory => _selectedCategory;
 
-  // We no longer keep a local _ledgerOrders list here because
-  // the ProfilePage now listens to Firestore directly.
-
   void clearData() {
     _searchQuery = "";
-    // Reset favorites in the local list
     for (var item in _allItems) {
       item.isFavorited = false;
     }
@@ -81,8 +77,6 @@ class MenuProvider extends ChangeNotifier {
             "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year % 100}",
         'timestamp': FieldValue.serverTimestamp(),
       });
-      // No need to notifyListeners() here because the Stream in ProfilePage
-      // will automatically detect this new database entry and update the UI.
     } catch (e) {
       debugPrint("Error adding to ledger: $e");
     }

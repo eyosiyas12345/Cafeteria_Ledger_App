@@ -1,7 +1,6 @@
 //items catagory
 enum ItemCategory { breakfast, lunch, drinks }
 
-// Fixed version of your original code
 final List<Map<String, dynamic>> drinkItems = [
   {
     "id": 01,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; // for data model flexiblity and usability
-import 'package:chapa_unofficial/chapa_unofficial.dart'; //for chapa
 import 'package:helloworld/pages/app_shell/splash_screen.dart';
 import 'package:helloworld/providers/menu_provider.dart';
 // imports for firebase
